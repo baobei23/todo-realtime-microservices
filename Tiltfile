@@ -8,10 +8,16 @@ k8s_yaml('./infra/development/k8s/secrets.yaml')
 k8s_yaml('./infra/development/k8s/app-config.yaml')
 
 ### End of K8s Config ###
+
 ### RabbitMQ ###
 k8s_yaml('./infra/development/k8s/rabbitmq-deployment.yaml')
 k8s_resource('rabbitmq', port_forwards=['5672', '15672'], labels='tooling')
 ### End RabbitMQ ###
+
+### PostgreSQL ###
+k8s_yaml('./infra/development/k8s/postgres-deployment.yaml')
+k8s_resource('postgres', port_forwards=['5432'], labels='tooling')
+### End PostgreSQL ###
 
 ### API Gateway ###
 

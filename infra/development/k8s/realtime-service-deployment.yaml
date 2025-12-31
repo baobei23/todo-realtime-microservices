@@ -1,60 +1,60 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-    name: realtime-service
+  name: realtime-service
 spec:
-    replicas: 1
-    selector:
-        matchLabels:
-            app: realtime-service
-    template:
-        metadata:
-            labels:
-                app: realtime-service
-        spec:
-            containers:
-                - name: realtime-service
-                  image: todo-realtime-microservices/realtime-service
-                  ports:
-                      - containerPort: 8083
-                  resources:
-                      requests:
-                          memory: '128Mi'
-                          cpu: '125m'
-                      limits:
-                          memory: '128Mi'
-                          cpu: '125m'
-                #   env:
-                #       # Accessing an env variable from the app-config config map
-                #       - name: REALTIME_SERVICE_HTTP_ADDR
-                #         valueFrom:
-                #             configMapKeyRef:
-                #                 key: REALTIME_SERVICE_HTTP_ADDR
-                #                 name: app-config
-                #   - name: JAEGER_ENDPOINT
-                #     valueFrom:
-                #         configMapKeyRef:
-                #             key: JAEGER_ENDPOINT
-                #             name: app-config
-                #   - name: RABBITMQ_URI
-                #     valueFrom:
-                #         secretKeyRef:
-                #             name: rabbitmq-credentials
-                #             key: uri
-                #   - name: STRIPE_WEBHOOK_KEY
-                #     valueFrom:
-                #         secretKeyRef:
-                #             name: stripe-secrets
-                #             key: stripe-webhook-key
+  replicas: 1
+  selector:
+    matchLabels:
+      app: realtime-service
+  template:
+    metadata:
+      labels:
+        app: realtime-service
+    spec:
+      containers:
+        - name: realtime-service
+          image: 'todo-realtime-microservices/realtime-service'
+          ports:
+            - containerPort: 8083
+          resources:
+            requests:
+              memory: '128Mi'
+              cpu: '125m'
+            limits:
+              memory: '128Mi'
+              cpu: '125m'
+        #   env:
+        #       # Accessing an env variable from the app-config config map
+        #       - name: REALTIME_SERVICE_HTTP_ADDR
+        #         valueFrom:
+        #             configMapKeyRef:
+        #                 key: REALTIME_SERVICE_HTTP_ADDR
+        #                 name: app-config
+        #   - name: JAEGER_ENDPOINT
+        #     valueFrom:
+        #         configMapKeyRef:
+        #             key: JAEGER_ENDPOINT
+        #             name: app-config
+        #   - name: RABBITMQ_URI
+        #     valueFrom:
+        #         secretKeyRef:
+        #             name: rabbitmq-credentials
+        #             key: uri
+        #   - name: STRIPE_WEBHOOK_KEY
+        #     valueFrom:
+        #         secretKeyRef:
+        #             name: stripe-secrets
+        #             key: stripe-webhook-key
 ---
 apiVersion: v1
 kind: Service
 metadata:
-    name: realtime-service
+  name: realtime-service
 spec:
-    type: ClusterIP
-    ports:
-        - port: 8083
-          targetPort: 8083
-    selector:
-        app: realtime-service
+  type: ClusterIP
+  ports:
+    - port: 8083
+      targetPort: 8083
+  selector:
+    app: realtime-service
