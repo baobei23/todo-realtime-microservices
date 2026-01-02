@@ -1,7 +1,7 @@
 package contracts
 
-// WSMessage pesan yang dikirim ke Frontend
+// WSMessage
 type WSMessage struct {
-	Type string `json:"type"` // e.g., "TODO_UPDATED"
-	Data any    `json:"data"` // Payload objek Todo
+	Type string `json:"type"`
+	Data any    `json:"data"`
 }

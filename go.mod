@@ -4,7 +4,9 @@ go 1.25.0
 
 require (
 	github.com/gin-gonic/gin v1.11.0
+	github.com/gorilla/websocket v1.5.3
 	github.com/jackc/pgx/v5 v5.8.0
+	github.com/rabbitmq/amqp091-go v1.10.0
 	google.golang.org/grpc v1.78.0
 	google.golang.org/protobuf v1.36.10
 )

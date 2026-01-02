@@ -1,10 +1,10 @@
 package contracts
 
-// AmqpMessage structure standar untuk event bus
+// AmqpMessage
 type AmqpMessage struct {
-	RoomID string `json:"room_id"` // Siapa yang harus terima update ini? (atau GroupID)
-	Type   string `json:"type"`    // Jenis Event
-	Data   []byte `json:"data"`    // Payload JSON asli (Todo yang diupdate)
+	RoomID string `json:"room_id"`
+	Type   string `json:"type"`
+	Data   []byte `json:"data"`
 }
 
 // Routing Keys (Events)
