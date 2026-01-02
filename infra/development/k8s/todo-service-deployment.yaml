@@ -24,7 +24,12 @@ spec:
             limits:
               memory: '128Mi'
               cpu: '125m'
-          # env:
+          env:
+            - name: POSTGRES_URI
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-credentials
+                  key: uri
           #     # Accessing an env variable from the app-config config map
           #     - name: TODO_SERVICE_HTTP_ADDR
           #       valueFrom:
@@ -52,9 +57,10 @@ kind: Service
 metadata:
   name: todo-service
 spec:
-  type: ClusterIP
-  ports:
-    - port: 8082
-      targetPort: 8082
   selector:
     app: todo-service
+  ports:
+    - port: 8082
+      name: grpc
+      targetPort: 8082
+  type: ClusterIP

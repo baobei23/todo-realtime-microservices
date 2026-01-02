@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package todo.v1;
 
-option go_package = "github.com/baobei23/todo-realtime-microservices/proto/todo/v1;todov1";
+option go_package = "shared/proto/todo;todo";
 
 service TodoService {
   // Membuat Todo baru
