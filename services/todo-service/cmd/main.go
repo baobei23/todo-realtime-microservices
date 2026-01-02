@@ -10,11 +10,13 @@ import (
 	"syscall"
 	"time"
 
+	"github.com/baobei23/todo-realtime-microservices/services/todo-service/internal/infrastructure/events"
 	"github.com/baobei23/todo-realtime-microservices/services/todo-service/internal/infrastructure/grpc"
 	"github.com/baobei23/todo-realtime-microservices/services/todo-service/internal/infrastructure/repository"
 	"github.com/baobei23/todo-realtime-microservices/services/todo-service/internal/service"
 	"github.com/baobei23/todo-realtime-microservices/shared/db"
 	"github.com/baobei23/todo-realtime-microservices/shared/env"
+	"github.com/baobei23/todo-realtime-microservices/shared/messaging"
 	grpcserver "google.golang.org/grpc"
 )
 
@@ -50,8 +52,19 @@ func main() {
 		log.Fatalf("Failed to listen: %v", err)
 	}
 
+	// RabbitMQ connection
+	rabbitMqURI := env.GetString("RABBITMQ_URI", "amqp://guest:guest@rabbitmq:5672/")
+	rabbitmq, err := messaging.NewRabbitMQ(rabbitMqURI)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer rabbitmq.Close()
+	log.Println("Starting RabbitMQ connection")
+
+	publisher := events.NewTodoEventPublisher(rabbitmq)
+
 	grpcServer := grpcserver.NewServer()
-	grpc.NewGRPCHandler(grpcServer, svc)
+	grpc.NewGRPCHandler(grpcServer, svc, publisher)
 
 	// 5. Graceful Shutdown
 	go func() {

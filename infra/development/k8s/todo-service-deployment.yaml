@@ -30,27 +30,11 @@ spec:
                 secretKeyRef:
                   name: postgres-credentials
                   key: uri
-          #     # Accessing an env variable from the app-config config map
-          #     - name: TODO_SERVICE_HTTP_ADDR
-          #       valueFrom:
-          #           configMapKeyRef:
-          #               key: TODO_SERVICE_HTTP_ADDR
-          #               name: app-config
-          # - name: JAEGER_ENDPOINT
-          #   valueFrom:
-          #       configMapKeyRef:
-          #           key: JAEGER_ENDPOINT
-          #           name: app-config
-          # - name: RABBITMQ_URI
-          #   valueFrom:
-          #       secretKeyRef:
-          #           name: rabbitmq-credentials
-          #           key: uri
-          # - name: STRIPE_WEBHOOK_KEY
-          #   valueFrom:
-          #       secretKeyRef:
-          #           name: stripe-secrets
-          #           key: stripe-webhook-key
+            - name: RABBITMQ_URI
+              valueFrom:
+                secretKeyRef:
+                  name: rabbitmq-credentials
+                  key: uri
 ---
 apiVersion: v1
 kind: Service

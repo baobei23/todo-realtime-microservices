@@ -5,17 +5,22 @@ import (
 	"time"
 
 	"github.com/baobei23/todo-realtime-microservices/services/todo-service/internal/domain"
+	"github.com/baobei23/todo-realtime-microservices/services/todo-service/internal/infrastructure/events"
 	pb "github.com/baobei23/todo-realtime-microservices/shared/proto/todo"
 	"google.golang.org/grpc"
 )
 
 type gRPCHandler struct {
 	pb.UnimplementedTodoServiceServer
-	service domain.TodoService
+	service   domain.TodoService
+	publisher *events.TodoEventPublisher
 }
 
-func NewGRPCHandler(server *grpc.Server, service domain.TodoService) *gRPCHandler {
-	handler := &gRPCHandler{service: service}
+func NewGRPCHandler(server *grpc.Server, service domain.TodoService, publisher *events.TodoEventPublisher) *gRPCHandler {
+	handler := &gRPCHandler{
+		service:   service,
+		publisher: publisher,
+	}
 
 	pb.RegisterTodoServiceServer(server, handler)
 	return handler
@@ -57,6 +62,9 @@ func (h *gRPCHandler) ListTodos(ctx context.Context, req *pb.ListTodosRequest) (
 func (h *gRPCHandler) UpdateTodo(ctx context.Context, req *pb.UpdateTodoRequest) (*pb.UpdateTodoResponse, error) {
 	todo, err := h.service.Update(ctx, req.Id, req.Title, req.Body)
 	if err != nil {
+		return nil, err
+	}
+	if err := h.publisher.PublishTodoUpdated(ctx, todo); err != nil {
 		return nil, err
 	}
 	return &pb.UpdateTodoResponse{Todo: convertToProto(todo)}, nil
